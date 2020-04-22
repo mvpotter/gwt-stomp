@@ -107,11 +107,11 @@ public class StompClient {
         };
 
         if (overSockJs === true) {
-            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = Stomp.over(function(){
+            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = StompJs.Stomp.over(function(){
                 return new SockJS(wsURL);
             });
         } else {
-            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = Stomp.client(wsURL);
+            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = StompJs.Stomp.client(wsURL);
         }
 
         if (self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient != null && !enableDebug) {
