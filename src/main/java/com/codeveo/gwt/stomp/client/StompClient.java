@@ -102,19 +102,23 @@ public class StompClient {
     		self.@com.codeveo.gwt.stomp.client.StompClient::onError(Ljava/lang/String;)(cause);
     	};
 
-        if (overSockJs === true) {
-            var socket = new $wnd.SockJS(wsURL);
+        var onDisconnect = function(){
+            self.@com.codeveo.gwt.stomp.client.StompClient::onDisconnect()();
+        };
 
-            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = $wnd.Stomp.over(socket);
+        if (overSockJs === true) {
+            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = Stomp.over(function(){
+                return new SockJS(wsURL);
+            });
         } else {
-            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = $wnd.Stomp.client(wsURL);
+            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = Stomp.client(wsURL);
         }
 
         if (self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient != null && !enableDebug) {
             self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.debug = null;
         }
 
-        self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.connect({}, onConnected, onError);
+        self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.connect({}, onConnected, onError, onDisconnect);
     }-*/;
 
     private native final void __disconnect()

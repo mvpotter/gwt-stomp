@@ -6,8 +6,8 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.TextResource;
 
 public class StompJS {
-    public static final String STOMP_VERSION = "2.3.4";
-    public static final String SOCKJS_VERSION = "0.3.4";
+    public static final String STOMP_VERSION = "5.4.4";
+    public static final String SOCKJS_VERSION = "1.4.0";
 
     protected interface JsClientBundle extends ClientBundle {
         JsClientBundle INSTANCE = GWT.create(JsClientBundle.class);
