@@ -1,12 +1,12 @@
 package com.codeveo.gwt.stomp.client;
 
+import com.google.gwt.core.client.JavaScriptObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.google.gwt.core.client.JavaScriptObject;
 
 public class StompClient {
     private static final Logger logger = Logger.getLogger(StompClient.class.getName());
@@ -81,6 +81,15 @@ public class StompClient {
         self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.send(destination, {}, jsonString);
     }-*/;
 
+    public native final boolean isConnected()
+    /*-{
+        if (self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient != null) {
+            return false;
+        } else {
+            return self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.connected;
+        }
+    }-*/;
+
     private native final void __connect(String wsURL, boolean overSockJs, boolean enableDebug)
     /*-{
         var self = this;
@@ -89,8 +98,6 @@ public class StompClient {
             self.@com.codeveo.gwt.stomp.client.StompClient::onConnected()();
         };
 
-        // TODO: Not used. Could not add to connect() because stomp.connect() is looking
-        //       for Function object while parsing arguments.
     	var onError = function (cause) {
     		self.@com.codeveo.gwt.stomp.client.StompClient::onError(Ljava/lang/String;)(cause);
     	};
@@ -107,7 +114,7 @@ public class StompClient {
             self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.debug = null;
         }
 
-        self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.connect({}, onConnected);
+        self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.connect({}, onConnected, onError);
     }-*/;
 
     private native final void __disconnect()
