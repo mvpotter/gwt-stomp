@@ -16,7 +16,6 @@ public class StompClient {
     private JavaScriptObject jsoStompClient;
     private boolean isConnected = false;
     private Map<String, Subscription> subscriptions;
-    private boolean enableDebug;
 
     public static interface Callback {
         void onConnect();
@@ -26,12 +25,11 @@ public class StompClient {
         void onDisconnect();
     }
 
-    public StompClient(String wsURL, Callback callback, boolean useSockJs, boolean enableDebug) {
+    public StompClient(String wsURL, Callback callback, boolean useSockJs) {
         this.useSockJs = useSockJs;
         this.wsURL = wsURL;
         this.callback = callback;
         this.subscriptions = new HashMap<String, Subscription>();
-        this.enableDebug = enableDebug;
     }
 
     public final void connect() {
@@ -41,7 +39,7 @@ public class StompClient {
         }
 
         logger.log(Level.FINE, "Connecting to '" + wsURL + "' ...");
-        __connect(wsURL, useSockJs, enableDebug);
+        __connect(wsURL, useSockJs);
     }
 
     public final void disconnect() {
@@ -90,46 +88,40 @@ public class StompClient {
         }
     }-*/;
 
-    private native final void __connect(String wsURL, boolean overSockJs, boolean enableDebug)
+    private native final void __connect(String wsURL, boolean overSockJs)
     /*-{
         var self = this;
-
-    	var onConnected = function () {
-            self.@com.codeveo.gwt.stomp.client.StompClient::onConnected()();
-        };
-
-    	var onError = function (cause) {
-    		self.@com.codeveo.gwt.stomp.client.StompClient::onError(Ljava/lang/String;)(cause);
-    	};
-
-        var onDisconnect = function(){
-            self.@com.codeveo.gwt.stomp.client.StompClient::onDisconnect()();
+        var stompClientConfig = {
+            onConnect: function () {
+                self.@com.codeveo.gwt.stomp.client.StompClient::onConnected()();
+            },
+            onStompError: function (cause) {
+                self.@com.codeveo.gwt.stomp.client.StompClient::onError(Ljava/lang/String;)(cause);
+            },
+            onDisconnect: function() {
+                self.@com.codeveo.gwt.stomp.client.StompClient::onDisconnect()();
+            },
+            onWebSocketClose: function() {
+                self.@com.codeveo.gwt.stomp.client.StompClient::onDisconnect()();
+            }
         };
 
         if (overSockJs === true) {
-            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = $wnd.StompJs.Stomp.over(function(){
+            stompClientConfig.webSocketFactory = function() {
                 return new $wnd.SockJS(wsURL);
-            });
+            }
         } else {
-            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = $wnd.StompJs.Stomp.client(wsURL);
+            stompClientConfig.brokerURL = wsURL;
         }
 
-        if (self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient != null && !enableDebug) {
-            self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.debug = null;
-        }
-
-        self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.connect({}, onConnected, onError, onDisconnect);
+        self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient = new $wnd.StompJs.Client(stompClientConfig);
+        self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.activate();
     }-*/;
 
     private native final void __disconnect()
     /*-{
     	var self = this;
-
-    	var ondisconnect = function(){
-    		self.@com.codeveo.gwt.stomp.client.StompClient::onDisconnect()();
-    	};
-
-    	self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.disconnect(ondisconnect);
+    	self.@com.codeveo.gwt.stomp.client.StompClient::jsoStompClient.deactivate();
     }-*/;
 
     private native final Subscription __subscribe(String destination, MessageListener listener)

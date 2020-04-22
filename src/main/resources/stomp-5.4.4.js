@@ -2114,4 +2114,3 @@ module.exports = __webpack_require__(/*! /home/kdeepak/MyWork/Tech/stomp/stompjs
 
 /******/ });
 });
-//# sourceMappingURL=stomp.umd.js.map
